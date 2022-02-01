@@ -51,3 +51,15 @@ Post Request Payload
   }
  ]
 }
+
+
+
+
+## TODO Task
+
+1. Create an api to add contact for existing user
+2. Create an API to update contact for existing user
+3. Create an api to delete single contact associated with given user
+4. Create an API to delete multiple contacts associated with given user
+5. Create anAPI to delete all contacts at a time assiciated with given user
+6. Create an api to fetch all contacts associated with given user
