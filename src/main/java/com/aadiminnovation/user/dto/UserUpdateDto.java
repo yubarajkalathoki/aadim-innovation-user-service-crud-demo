@@ -1,7 +1,7 @@
 package com.aadiminnovation.user.dto;
 
 public class UserUpdateDto extends UserCreateDto {
-	private Long id;
+	protected Long id;
 
 	public Long getId() {
 		return id;

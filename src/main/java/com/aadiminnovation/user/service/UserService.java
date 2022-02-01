@@ -7,8 +7,10 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import com.aadiminnovation.user.controller.UserListResponseDto;
 import com.aadiminnovation.user.dto.ContactDto;
 import com.aadiminnovation.user.dto.UserCreateDto;
+import com.aadiminnovation.user.dto.UserResponseDto;
 import com.aadiminnovation.user.dto.UserUpdateDto;
 import com.aadiminnovation.user.entity.Contact;
 import com.aadiminnovation.user.entity.User;
@@ -24,14 +26,14 @@ public class UserService {
 	@Autowired
 	private ContactRepository contactRepository;
 
-	public User addUser(UserCreateDto request) {
+	public UserResponseDto addUser(UserCreateDto request) {
 		User user = new User();
 		user.setEmail(request.getEmail());
 		user.setName(request.getName());
 		user.setPassword(request.getPassword());
 		user.setMobileNumber(request.getMobileNumber());
 		System.out.println("Inserting user");
-		userRepository.save(user);
+		User savedUser = userRepository.save(user);
 
 		List<ContactDto> contactRequests = request.getContacts();
 
@@ -42,23 +44,46 @@ public class UserService {
 			contact.setUser(user);
 			contactRepository.save(contact);
 		}
-		return user;
+		return getUserResponseDto(savedUser);
 	}
 
-	public List<User> getAll() {
-		System.out.println("Get all method called from service");
-		List<User> users = new ArrayList<>();
+	private UserResponseDto getUserResponseDto(User savedUser) {
+		UserResponseDto response = new UserResponseDto();
+		response.setEmail(savedUser.getEmail());
+		response.setId(savedUser.getId());
+		response.setMobileNumber(savedUser.getMobileNumber());
+		response.setName(savedUser.getName());
+		response.setPassword(savedUser.getPassword());
+		
+		List<Contact> contacts = contactRepository.findByUserId(savedUser.getId());
+		
+		List<ContactDto> contactDtoList = new ArrayList<>();
+		
+		for(Contact contact: contacts) {
+			ContactDto dto = new ContactDto();
+			dto.setEmail(contact.getEmail());
+			dto.setMobileNumber(contact.getEmail());
+			contactDtoList.add(dto );
+		}
+		response.setContacts(contactDtoList);
+		return response;
+	}
 
-		users = (List<User>) userRepository.findAll();
+	public UserListResponseDto getAll() {
+		System.out.println("Get all method called from service");
+		List<UserResponseDto> userResponseList = new ArrayList<>();
+
+		List<User> users = (List<User>) userRepository.findAll();
 
 		for (User user : users) {
-			List<Contact> contacts = contactRepository.findByUser(user);
-			user.setContacts(contacts);
+			userResponseList.add(getUserResponseDto(user));
 		}
-
 		System.out.println("Users {}"+ users);
 		
-		return users;
+		UserListResponseDto response = new UserListResponseDto();
+		response.setUsers(userResponseList);
+		response.setTotal(userResponseList.size());
+		return response;
 	}
 
 	public void delete(Long id) {
@@ -75,6 +100,14 @@ public class UserService {
 			user.setPassword(request.getPassword());
 			user.setMobileNumber(request.getMobileNumber());
 			return userRepository.save(user);
+		}
+		return null;
+	}
+
+	public UserResponseDto get(Long id) {
+		Optional<User> optionalUser = userRepository.findById(id);
+		if(optionalUser.isPresent()) {
+			return getUserResponseDto(optionalUser.get());
 		}
 		return null;
 	}

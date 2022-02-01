@@ -50,4 +50,4 @@ Post Request Payload
    "email": "shankar.sharma@aadimcollege.edu.np"
   }
  ]
-}```
+}

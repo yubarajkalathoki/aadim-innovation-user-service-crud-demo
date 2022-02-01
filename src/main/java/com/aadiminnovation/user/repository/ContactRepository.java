@@ -11,4 +11,6 @@ public interface ContactRepository extends CrudRepository<Contact, Long> {
 
 	List<Contact> findByUser(User user);
 
+	List<Contact> findByUserId(Long id);
+
 }
