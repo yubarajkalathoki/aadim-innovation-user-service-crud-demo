@@ -58,8 +58,13 @@ Post Request Payload
 ## TODO Task
 
 1. Create an api to add contact for existing user
+	create contact (columns) values (values) where user_id=1
 2. Create an API to update contact for existing user
+	create contact set column1=value1 where user_id=1
 3. Create an api to delete single contact associated with given user
+	delete from contact where id=1 and user_id=1
 4. Create an API to delete multiple contacts associated with given user
-5. Create anAPI to delete all contacts at a time assiciated with given user
+	delete from contact where id in (1,2,3) and user_id=1
+5. Create an API to delete all contacts at a time assiciated with given user
+	delete from contact where user_id=1
 6. Create an api to fetch all contacts associated with given user
