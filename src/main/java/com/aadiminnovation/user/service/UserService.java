@@ -19,7 +19,7 @@ public class UserService {
 
 	@Autowired
 	private UserRepository userRepository;
-	
+
 	@Autowired
 	private ContactRepository contactRepository;
 
@@ -30,31 +30,44 @@ public class UserService {
 		user.setPassword(request.getPassword());
 		user.setMobileNumber(request.getMobileNumber());
 		System.out.println("Inserting user");
-		 userRepository.save(user);
-		
-		 List<ContactRequest> contactRequests = request.getContacts();
-		 
-		 List<Contact> contacts = new ArrayList<>();
-		 
+		userRepository.save(user);
+
+		List<ContactRequest> contactRequests = request.getContacts();
+
+		List<Contact> contacts = new ArrayList<>();
+
 //		 c style
-		 for(int i =0; i< contactRequests.size(); i++) {
-			 Contact contact = new Contact();
-			 contact.setEmail(contactRequests.get(i).getEmail());
-			 contact.setMobileNumber(contactRequests.get(i).getMobileNumber());
-			 contact.setUser(user);
-			 contacts.add(contact);
-		 }
-		 // for each loop / enhanced loop
+		for (int i = 0; i < contactRequests.size(); i++) {
+			Contact contact = new Contact();
+			contact.setEmail(contactRequests.get(i).getEmail());
+			contact.setMobileNumber(contactRequests.get(i).getMobileNumber());
+			contact.setUser(user);
+			contacts.add(contact);
+		}
+		// for each loop / enhanced loop
 //		for(Contact contact: contacts) {
 //			contact.setUser(user);
 //		}
-		
+
 		contactRepository.saveAll(contacts);
+		user.setContacts(contacts);
 		return user;
 	}
 
-	public Iterable<User> getAll() {
-		return userRepository.findAll();
+	public List<User> getAll() {
+		System.out.println("Get all method called from service");
+		List<User> users = new ArrayList<>();
+
+		users = (List<User>) userRepository.findAll();
+
+		for (User user : users) {
+			List<Contact> contacts = contactRepository.findByUser(user);
+			user.setContacts(contacts);
+		}
+
+		System.out.println("Users {}"+ users);
+		
+		return users;
 	}
 
 	public void delete(Long id) {

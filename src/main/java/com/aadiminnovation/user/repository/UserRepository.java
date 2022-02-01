@@ -4,6 +4,6 @@ import org.springframework.data.repository.CrudRepository;
 
 import com.aadiminnovation.user.entity.User;
 
-public interface UserRepository extends   CrudRepository<User, Long> {
+public interface UserRepository extends CrudRepository<User, Long> {
 
 }

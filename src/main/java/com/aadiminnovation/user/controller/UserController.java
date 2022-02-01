@@ -1,6 +1,6 @@
 package com.aadiminnovation.user.controller;
 
-import javax.websocket.server.PathParam;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -17,43 +17,43 @@ import org.springframework.web.bind.annotation.RestController;
 import com.aadiminnovation.user.entity.User;
 import com.aadiminnovation.user.service.UserService;
 
-
 @RestController
 @RequestMapping("/api/users")
 public class UserController {
 
 	@Autowired
 	private UserService userService;
-	
+
 	/**
 	 * Default content type application/json
+	 * 
 	 * @param request
 	 */
 	@PostMapping
 	@ResponseStatus(code = HttpStatus.CREATED)
 	public User addUser(@RequestBody UserRequest request) {
-		
+
 		System.out.println("Controller method called");
 		return userService.addUser(request);
 	}
-	
+
 	@GetMapping
 	@ResponseStatus(code = HttpStatus.OK)
-	public Iterable<User> getAll() {
+	public List<User> getAll() {
+		System.out.println("Get all method called");
 		return userService.getAll();
 	}
-	
+
 	@DeleteMapping("/{id}")
 	@ResponseStatus(code = HttpStatus.NO_CONTENT)
 	public void delete(@PathVariable Long id) {
-		 userService.delete(id);
+		userService.delete(id);
 	}
-	
+
 	@PutMapping("/{id}")
 	@ResponseStatus(code = HttpStatus.OK)
-	public User update(@PathVariable Long id , @RequestBody UserRequest request) {
+	public User update(@PathVariable Long id, @RequestBody UserRequest request) {
 		return userService.update(id, request);
 	}
-	
-	
+
 }
