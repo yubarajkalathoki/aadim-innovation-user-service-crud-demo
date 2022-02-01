@@ -7,8 +7,9 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import com.aadiminnovation.user.controller.ContactRequest;
-import com.aadiminnovation.user.controller.UserRequest;
+import com.aadiminnovation.user.dto.ContactDto;
+import com.aadiminnovation.user.dto.UserCreateDto;
+import com.aadiminnovation.user.dto.UserUpdateDto;
 import com.aadiminnovation.user.entity.Contact;
 import com.aadiminnovation.user.entity.User;
 import com.aadiminnovation.user.repository.ContactRepository;
@@ -23,7 +24,7 @@ public class UserService {
 	@Autowired
 	private ContactRepository contactRepository;
 
-	public User addUser(UserRequest request) {
+	public User addUser(UserCreateDto request) {
 		User user = new User();
 		user.setEmail(request.getEmail());
 		user.setName(request.getName());
@@ -32,25 +33,15 @@ public class UserService {
 		System.out.println("Inserting user");
 		userRepository.save(user);
 
-		List<ContactRequest> contactRequests = request.getContacts();
+		List<ContactDto> contactRequests = request.getContacts();
 
-		List<Contact> contacts = new ArrayList<>();
-
-//		 c style
 		for (int i = 0; i < contactRequests.size(); i++) {
 			Contact contact = new Contact();
 			contact.setEmail(contactRequests.get(i).getEmail());
 			contact.setMobileNumber(contactRequests.get(i).getMobileNumber());
 			contact.setUser(user);
-			contacts.add(contact);
+			contactRepository.save(contact);
 		}
-		// for each loop / enhanced loop
-//		for(Contact contact: contacts) {
-//			contact.setUser(user);
-//		}
-
-		contactRepository.saveAll(contacts);
-		user.setContacts(contacts);
 		return user;
 	}
 
@@ -74,7 +65,7 @@ public class UserService {
 		userRepository.deleteById(id);
 	}
 
-	public User update(Long id, UserRequest request) {
+	public User update(Long id, UserUpdateDto request) {
 		// find user by id and set the new values
 		Optional<User> optional = userRepository.findById(id);
 		if (optional.isPresent()) {

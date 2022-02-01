@@ -1,6 +1,6 @@
-package com.aadiminnovation.user.controller;
+package com.aadiminnovation.user.dto;
 
-public class ContactRequest {
+public class ContactDto {
 	private String mobileNumber;
 	private String email;
 

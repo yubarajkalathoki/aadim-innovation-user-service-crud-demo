@@ -1,4 +1,4 @@
-POST 
+## POST 
 url:port/context-path/api/users 
 
 Creates new user
@@ -35,7 +35,7 @@ Adds the new contacts for user id 1
 
 Post Request Payload
 
-{
+```{
  "name": "Bipana KC",
  "email": "milan@gmail.com",
  "password": "897",
@@ -50,4 +50,4 @@ Post Request Payload
    "email": "shankar.sharma@aadimcollege.edu.np"
   }
  ]
-}
+}```
