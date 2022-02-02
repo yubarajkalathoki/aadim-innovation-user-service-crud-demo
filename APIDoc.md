@@ -1,25 +1,36 @@
+
+### Create User
+
 ## POST 
+```
 url:port/context-path/api/users 
+```
 
-Creates new user
+### Update User
 
-PUT 
+## PUT 
+```
 url:port/context-path/api/users/1
+```
 
-Updates existing user with id 1.
-
-DELETE 
+### Delete User
+## DELETE 
+```
 url:port/context-path/api/users/1
+```
 
-Deletes user whose id is 1
+### Get All User
 
-GET
+## GET
+```
 url:port/context-path/api/users
+```
 
-Returns all users
-
-GET
+### Get Single User
+## GET
+```
 url:port/context-path/api/users/1
+```
 
 Returns user detail which has id 1
 
@@ -35,7 +46,8 @@ Adds the new contacts for user id 1
 
 Post Request Payload
 
-```{
+```
+{
  "name": "Bipana KC",
  "email": "milan@gmail.com",
  "password": "897",
@@ -51,6 +63,7 @@ Post Request Payload
   }
  ]
 }
+```
 
 
 
@@ -58,6 +71,7 @@ Post Request Payload
 ## TODO Task
 
 1. Create an api to add contact for existing user
+	API: 
 	create contact (columns) values (values) where user_id=1
 2. Create an API to update contact for existing user
 	create contact set column1=value1 where user_id=1

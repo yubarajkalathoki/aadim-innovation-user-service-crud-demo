@@ -8,6 +8,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.aadiminnovation.user.controller.UserListResponseDto;
+import com.aadiminnovation.user.dto.ContactCreateDto;
 import com.aadiminnovation.user.dto.ContactDto;
 import com.aadiminnovation.user.dto.UserCreateDto;
 import com.aadiminnovation.user.dto.UserResponseDto;
@@ -36,7 +37,13 @@ public class UserService {
 		User savedUser = userRepository.save(user);
 
 		List<ContactDto> contactRequests = request.getContacts();
+		saveContacts(user, contactRequests);
+		return getUserResponseDto(savedUser);
+	}
 
+	private void saveContacts(User user, List<ContactDto> contactRequests) {
+		if (contactRequests == null)
+			return;
 		for (int i = 0; i < contactRequests.size(); i++) {
 			Contact contact = new Contact();
 			contact.setEmail(contactRequests.get(i).getEmail());
@@ -44,7 +51,6 @@ public class UserService {
 			contact.setUser(user);
 			contactRepository.save(contact);
 		}
-		return getUserResponseDto(savedUser);
 	}
 
 	private UserResponseDto getUserResponseDto(User savedUser) {
@@ -54,16 +60,16 @@ public class UserService {
 		response.setMobileNumber(savedUser.getMobileNumber());
 		response.setName(savedUser.getName());
 		response.setPassword(savedUser.getPassword());
-		
+
 		List<Contact> contacts = contactRepository.findByUserId(savedUser.getId());
-		
+
 		List<ContactDto> contactDtoList = new ArrayList<>();
-		
-		for(Contact contact: contacts) {
+
+		for (Contact contact : contacts) {
 			ContactDto dto = new ContactDto();
 			dto.setEmail(contact.getEmail());
 			dto.setMobileNumber(contact.getEmail());
-			contactDtoList.add(dto );
+			contactDtoList.add(dto);
 		}
 		response.setContacts(contactDtoList);
 		return response;
@@ -78,8 +84,8 @@ public class UserService {
 		for (User user : users) {
 			userResponseList.add(getUserResponseDto(user));
 		}
-		System.out.println("Users {}"+ users);
-		
+		System.out.println("Users {}" + users);
+
 		UserListResponseDto response = new UserListResponseDto();
 		response.setUsers(userResponseList);
 		response.setTotal(userResponseList.size());
@@ -106,9 +112,27 @@ public class UserService {
 
 	public UserResponseDto get(Long id) {
 		Optional<User> optionalUser = userRepository.findById(id);
-		if(optionalUser.isPresent()) {
+		if (optionalUser.isPresent()) {
 			return getUserResponseDto(optionalUser.get());
 		}
+		return null;
+	}
+
+	public UserResponseDto saveContacts(Long id, ContactCreateDto dto) {
+		Optional<User> optionalUser = userRepository.findById(id);
+		if(optionalUser.isPresent()) {
+			User user = optionalUser.get();
+			for (int i = 0; i < dto.getContacts().size(); i++) {
+				Contact contact = new Contact();
+				ContactDto contactDto = dto.getContacts().get(i);
+				contact.setEmail(contactDto.getEmail());
+				contact.setMobileNumber(contactDto.getMobileNumber());
+				contact.setUser(user);
+				contactRepository.save(contact);
+			}
+			return getUserResponseDto(user);
+		}
+		
 		return null;
 	}
 

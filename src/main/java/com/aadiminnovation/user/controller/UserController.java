@@ -2,6 +2,7 @@ package com.aadiminnovation.user.controller;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -12,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.aadiminnovation.user.dto.ContactCreateDto;
 import com.aadiminnovation.user.dto.UserCreateDto;
 import com.aadiminnovation.user.dto.UserResponseDto;
 import com.aadiminnovation.user.dto.UserUpdateDto;
@@ -60,6 +62,12 @@ public class UserController {
 	@ResponseStatus(code = HttpStatus.OK)
 	public UserResponseDto get(@PathVariable Long id) {
 		return userService.get(id);
+	}
+	
+	@PostMapping("/{id}/contacts")
+	@ResponseStatus(code = HttpStatus.CREATED)
+	public UserResponseDto saveContacts(@PathVariable Long id, @Validated @RequestBody ContactCreateDto dto) {
+		return userService.saveContacts(id, dto);
 	}
 
 }
