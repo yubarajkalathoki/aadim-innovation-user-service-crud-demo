@@ -1,8 +1,6 @@
-package com.aadiminnovation.user.controller;
+package com.aadiminnovation.user.dto;
 
 import java.util.List;
-
-import com.aadiminnovation.user.dto.UserResponseDto;
 
 public class UserListResponseDto {
 	private List<UserResponseDto> users;

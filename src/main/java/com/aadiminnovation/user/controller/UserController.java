@@ -15,6 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.aadiminnovation.user.dto.ContactCreateDto;
 import com.aadiminnovation.user.dto.UserCreateDto;
+import com.aadiminnovation.user.dto.UserListResponseDto;
 import com.aadiminnovation.user.dto.UserResponseDto;
 import com.aadiminnovation.user.dto.UserUpdateDto;
 import com.aadiminnovation.user.entity.User;
@@ -50,6 +51,12 @@ public class UserController {
 	@ResponseStatus(code = HttpStatus.NO_CONTENT)
 	public void delete(@PathVariable Long id) {
 		userService.delete(id);
+	}
+	
+	@DeleteMapping("/by-email/{anitaDidi}")
+	@ResponseStatus(code = HttpStatus.NO_CONTENT)
+	public void deleteByEmailalkdjflajflajdls(@PathVariable("anitaDidi" ) String email) {
+		userService.emailBataDeleteGar(email);
 	}
 
 	@PutMapping("/{id}")

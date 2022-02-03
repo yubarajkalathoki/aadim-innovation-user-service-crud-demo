@@ -6,11 +6,12 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
-import com.aadiminnovation.user.controller.UserListResponseDto;
 import com.aadiminnovation.user.dto.ContactCreateDto;
 import com.aadiminnovation.user.dto.ContactDto;
 import com.aadiminnovation.user.dto.UserCreateDto;
+import com.aadiminnovation.user.dto.UserListResponseDto;
 import com.aadiminnovation.user.dto.UserResponseDto;
 import com.aadiminnovation.user.dto.UserUpdateDto;
 import com.aadiminnovation.user.entity.Contact;
@@ -92,7 +93,18 @@ public class UserService {
 		return response;
 	}
 
+	/**
+	 * Implementation logic is:
+	 * <p>
+	 * <li>First delete the contact associated with given userId</li>
+	 * <li>Then only delete the user by id</li>
+	 * 
+	 * @param id
+	 */
+	@Transactional
 	public void delete(Long id) {
+		// case 1
+		contactRepository.deleteByUserId(id);
 		userRepository.deleteById(id);
 	}
 
@@ -120,7 +132,7 @@ public class UserService {
 
 	public UserResponseDto saveContacts(Long id, ContactCreateDto dto) {
 		Optional<User> optionalUser = userRepository.findById(id);
-		if(optionalUser.isPresent()) {
+		if (optionalUser.isPresent()) {
 			User user = optionalUser.get();
 			for (int i = 0; i < dto.getContacts().size(); i++) {
 				Contact contact = new Contact();
@@ -132,8 +144,15 @@ public class UserService {
 			}
 			return getUserResponseDto(user);
 		}
-		
+
 		return null;
 	}
 
+	@Transactional
+	public void emailBataDeleteGar(String furkesaliEmail) {
+		
+		contactRepository.deleteByUserEmail(furkesaliEmail);
+		
+		userRepository.deleteByEmail(furkesaliEmail);
+	}
 }

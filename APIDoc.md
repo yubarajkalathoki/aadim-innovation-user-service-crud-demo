@@ -67,6 +67,22 @@ Post Request Payload
 
 
 
+### TODO Task
+Create an API to delete user by email
+	`delete from user where email='myemail@gmail.com'`
+
+## DELETE
+# URL
+`port/context-path/api/users/{email}`
+
+
+Create an API to delete user by name
+	`delete from user where name='your name'`
+
+## DELETE
+# URL
+`port/context-path/api/users/{name}`
+
 
 ## TODO Task
 
