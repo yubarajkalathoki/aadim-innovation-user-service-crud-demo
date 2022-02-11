@@ -22,11 +22,15 @@ import com.aadiminnovation.user.repository.UserRepository;
 @Service
 public class UserService {
 
+	// Inject
 	@Autowired
 	private UserRepository userRepository;
 
 	@Autowired
 	private ContactRepository contactRepository;
+	
+//	@Autowired
+//	private TeacherRepository trepo;
 
 	public UserResponseDto addUser(UserCreateDto request) {
 		User user = new User();
@@ -69,7 +73,7 @@ public class UserService {
 		for (Contact contact : contacts) {
 			ContactDto dto = new ContactDto();
 			dto.setEmail(contact.getEmail());
-			dto.setMobileNumber(contact.getEmail());
+			dto.setMobileNumber(contact.getMobileNumber());
 			contactDtoList.add(dto);
 		}
 		response.setContacts(contactDtoList);
@@ -150,9 +154,29 @@ public class UserService {
 
 	@Transactional
 	public void emailBataDeleteGar(String furkesaliEmail) {
-		
+		// transaction begin
 		contactRepository.deleteByUserEmail(furkesaliEmail);
-		
 		userRepository.deleteByEmail(furkesaliEmail);
+		// transaction commit
+	}
+	@Transactional
+	public void deleteContacts(Long userId, List<Long> contactIds) {
+//		contactRepository.deleteAllById(contactIds);
+		contactRepository.deleteByIdInAndUserId(contactIds, userId);
+		
+	}
+	
+	@Transactional
+	public void deleteContacts(Long userId) {
+		contactRepository.deleteByUserId( userId);
+		
+	}
+
+	@Transactional
+	public void deleteContacts(List<Long> contactIds) {
+//		contactRepository.deleteAllById(contactIds);
+		contactRepository.deleteByIdIn(contactIds);
+
+		
 	}
 }

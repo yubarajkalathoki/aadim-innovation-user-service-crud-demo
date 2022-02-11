@@ -19,4 +19,8 @@ public interface ContactRepository extends CrudRepository<Contact, Long> {
 // delete from contact where email = givenEmail
 	void deleteByUserEmail(String givenEmail);
 
+	void deleteByIdIn(List<Long> contactIds);
+
+	void deleteByIdInAndUserId(List<Long> contactIds, Long userId);
+
 }
